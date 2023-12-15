@@ -1,9 +1,13 @@
 require("dotenv").config();
 const { Telegraf } = require("telegraf");
-const bot = new Telegraf(process.env.TG_TOKEN);
+global.bot = new Telegraf(process.env.TG_TOKEN);
 
-bot.start((ctx) => {
-  ctx.reply("Welcome");
+const tiktok = require("./modules/tiktok/handler");
+
+bot.on("text", (ctx) => {
+  const text = ctx.message.text;
+  const chatId = ctx.message.chat.id;
+  if (text.includes("tiktok.com")) tiktok(text, chatId);
 });
 
 bot.launch();
