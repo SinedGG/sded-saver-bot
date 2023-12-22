@@ -14,9 +14,7 @@ module.exports = (url) => {
     const browser = await puppeteer.launch(arg);
     const page = await browser.newPage();
 
-    await page.goto(
-      "https://www.instagram.com/reel/CyrOOK_rTSs/?igshid=MWVodGpnZ3picWR5dQ=="
-    );
+    await page.goto(url);
     await page.waitForSelector("video");
 
     const videoSrc = await page.evaluate(() => {
