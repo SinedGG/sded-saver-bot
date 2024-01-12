@@ -15,3 +15,9 @@ model Users {
   tg_last_name  String?
   joined_at     DateTime @default(now())
 }
+
+model Storage {
+  id         Int    @id @default(autoincrement())
+  message_id Int
+  yt_id      String @unique
+}

@@ -10,13 +10,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.7.1",
-    "axios": "^1.6.2",
+    "@prisma/client": "^5.8.0",
+    "axios": "^1.6.5",
     "dotenv": "^16.3.1",
+    "fluent-ffmpeg": "^2.1.2",
     "puppeteer": "^21.6.1",
-    "telegraf": "^4.15.3"
+    "telegraf": "^4.15.3",
+    "ytdl-core": "^4.11.5",
+    "ytmusic-api": "^5.0.2"
   },
   "devDependencies": {
-    "prisma": "^5.7.1"
+    "eslint": "^8.56.0",
+    "prisma": "^5.8.0"
   }
 }
