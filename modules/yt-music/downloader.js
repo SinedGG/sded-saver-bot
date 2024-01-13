@@ -17,13 +17,11 @@ module.exports = (stream, meta) => {
       .outputOptions("-id3v2_version", "3")
       .outputOptions("-metadata", "title=" + meta.title)
       .outputOptions("-metadata", "artist=" + meta.artist)
-
       .on("end", () => {
         resolve({ song: path, art: artPath });
       })
       .on("error", (err) => {
-        reject(err);
-        console.log(err);
+        reject(`FFMPEG error: ${err}`);
       })
       .output(path)
       .run();
@@ -46,8 +44,7 @@ function getArt(url, videoId) {
           resolve(path);
         });
       } catch (error) {
-        console.log(` Art download error`);
-        reject(error);
+        reject(["Error while downloading art:", error]);
       }
     });
   }

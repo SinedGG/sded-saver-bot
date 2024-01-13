@@ -13,6 +13,7 @@ model Users {
   tg_username   String?
   tg_first_name String?
   tg_last_name  String?
+  language_code String?  @default("eng")
   joined_at     DateTime @default(now())
 }
 

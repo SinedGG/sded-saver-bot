@@ -1,6 +1,10 @@
 const downloader = require("./downloader");
-module.exports = (url, chatId) => {
-  return new Promise(async (resolve, reject) => {
+const sendMessage = require("../sendMessage");
+const formatTime = require("../../utils/formatTime");
+module.exports = async (url, chatId) => {
+  try {
+    const startTime = performance.now();
+
     const data = await downloader(url);
     if (data.type == "video") {
       bot.telegram.sendVideo(chatId, data.url, {
@@ -20,7 +24,13 @@ module.exports = (url, chatId) => {
       mediaGroup[0].caption = `[link](${url}) | [via](https://t.me/SDEDsaver_bot)`;
       mediaGroup[0].parse_mode = "Markdown";
 
-      bot.telegram.sendMediaGroup(chatId, mediaGroup);
+      await bot.telegram.sendMediaGroup(chatId, mediaGroup);
     }
-  });
+    const endTime = performance.now();
+    const executionTime = endTime - startTime;
+    console.log(`Execution time: ${formatTime(executionTime)} for ${url}`);
+  } catch (error) {
+    console.log(error);
+    sendMessage(chatId, "downloadError");
+  }
 };

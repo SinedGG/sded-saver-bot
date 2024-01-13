@@ -9,12 +9,16 @@ const headers = {
 
 module.exports = (url) => {
   return new Promise(async (resolve, reject) => {
-    var videoId = validateUrl(url);
-    if (!videoId) url = await getFullUrl(url);
-    videoId = validateUrl(url);
-    if (!videoId) reject("Invalid url");
-    const sourceUrl = await getSourceUrl(videoId, url);
-    resolve(sourceUrl);
+    try {
+      let videoId = validateUrl(url);
+      if (!videoId) url = await getFullUrl(url);
+      videoId = validateUrl(url);
+      if (!videoId) reject("Invalid url");
+      const sourceUrl = await getSourceUrl(videoId, url);
+      resolve(sourceUrl);
+    } catch (error) {
+      reject(error);
+    }
   });
 };
 
@@ -42,26 +46,30 @@ function validateUrl(url) {
 
 function getSourceUrl(videoId, url) {
   return new Promise(async (resolve, reject) => {
-    const { data } = await axios.get(
-      `${api}/aweme/v1/feed/?aweme_id=${videoId}`
-    );
-    const images = data.aweme_list[0]?.image_post_info?.images;
-    if (images) {
-      const tmp = {
-        type: "image",
-        url: [],
-        sourceUrl: url,
-      };
-      images.forEach((e) => {
-        tmp.url.push(e.display_image.url_list[1]);
-      });
-      resolve(tmp);
-    } else {
-      resolve({
-        type: "video",
-        url: data.aweme_list[0]?.video?.play_addr?.url_list[0],
-        sourceUrl: url,
-      });
+    try {
+      const { data } = await axios.get(
+        `${api}/aweme/v1/feed/?aweme_id=${videoId}`
+      );
+      const images = data.aweme_list[0]?.image_post_info?.images;
+      if (images) {
+        const tmp = {
+          type: "image",
+          url: [],
+          sourceUrl: url,
+        };
+        images.forEach((e) => {
+          tmp.url.push(e.display_image.url_list[1]);
+        });
+        resolve(tmp);
+      } else {
+        resolve({
+          type: "video",
+          url: data.aweme_list[0]?.video?.play_addr?.url_list[0],
+          sourceUrl: url,
+        });
+      }
+    } catch (error) {
+      reject(error);
     }
   });
 }
