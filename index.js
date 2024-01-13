@@ -8,6 +8,7 @@ require("./handler/event.js")(bot);
 const tiktok = require("./modules/tiktok/handler");
 const insta = require("./modules/insta/handler");
 const yt = require("./modules/yt-music/handler");
+const sendMessage = require("./modules/sendMessage.js");
 
 bot.on("text", (ctx) => {
   const text = ctx.message.text;
@@ -15,6 +16,8 @@ bot.on("text", (ctx) => {
   console.log(`Request from ${ctx.from.username} (${chatId}) - ${text} `);
   if (text.includes("tiktok.com")) tiktok(text, chatId);
   else if (text.includes("instagram.com/reel")) insta(text, chatId);
+  if (text.includes("youtube.com/playlist?list=PL"))
+    sendMessage(chatId, "playlistDetected");
   else yt(text, chatId);
 });
 
