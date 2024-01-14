@@ -23,18 +23,23 @@ async function downloadList(list_id, chatId) {
   }
 
   try {
-    let { links, page_token } = await playlist.load(list_id);
+    const info = await playlist.info(list_id);
+    bot.telegram.sendMessage(
+      chatId,
+      `Playlist: ${info.snippet.title} size: ${info.contentDetails.itemCount}`
+    );
+
     playlist.tasks.create(chatId);
     sendMessage(chatId, "playlistStart");
-    for (let i = 0; i < links.length; i++) {
-      if (!playlist.tasks.get(chatId)) break;
-      if (i == links.length - 2 && !oneTime) {
-        let out = await playlist.load(list_id, page_token);
-        links = links.concat(out.links);
-        page_token = out.page_token;
+    let links,
+      page_token = "";
+    do {
+      ({ links, page_token } = await playlist.load(list_id, page_token));
+      for (let i = 0; i < links.length; i++) {
+        if (!playlist.tasks.get(chatId)) break;
+        await download(`https://www.youtube.com/watch?v=${links[i]}`, chatId);
       }
-      await download(`https://www.youtube.com/watch?v=${links[i]}`, chatId);
-    }
+    } while (page_token && !oneTime);
   } catch (error) {
     console.log(error);
     sendMessage(chatId, "playlistError");
