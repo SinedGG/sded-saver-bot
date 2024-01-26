@@ -14,11 +14,15 @@ bot.on("text", (ctx) => {
   const text = ctx.message.text;
   const chatId = ctx.message.chat.id;
   console.log(`Request from ${ctx.from.username} (${chatId}) - ${text} `);
-  if (text.includes("tiktok.com")) tiktok(text, chatId);
-  else if (text.includes("instagram.com/reel")) insta(text, chatId);
-  if (text.includes("youtube.com/playlist?list=PL"))
+  if (text.includes("tiktok.com")) {
+    tiktok(text, chatId);
+  } else if (text.includes("instagram.com/reel")) {
+    insta(text, chatId);
+  } else if (text.includes("youtube.com/playlist?list=PL")) {
     sendMessage(chatId, "playlistDetected");
-  else yt(text, chatId);
+  } else {
+    yt(text, chatId);
+  }
 });
 
 bot.launch();
