@@ -11,13 +11,9 @@ module.exports = (url) => {
       );
       if (data.error) reject(data.error);
 
-      console.log(data);
-
       const jpgUrls = data.medias
         .filter((media) => media.extension === "jpg")
         .map((media) => media.url);
-
-      console.log(jpgUrls);
 
       if (jpgUrls.length != 0) {
         resolve({
